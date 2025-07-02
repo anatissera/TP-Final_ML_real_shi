@@ -8,7 +8,7 @@ def split_train_val_with_raw_dev(
     dev_ano_signal_raw,  dev_ano_coeffs_raw,
     val_frac=0.2, seed=42
 ):
-    # 1) Divide normales en train_norm / val_norm
+    # dividir normales en train y val
     N = len(dev_norm_signal_raw)
     vsize = int(val_frac * N)
     train_size = N - vsize
@@ -23,20 +23,20 @@ def split_train_val_with_raw_dev(
     sig_vn_raw = dev_norm_signal_raw[idx_vn]
     coe_vn_raw = dev_norm_coeffs_raw[idx_vn]
 
-    # 2) Calcula media/std sólo sobre train_norm
+    # media/std sólo sobre train_norm
     mean_sig = sig_tr_raw.mean()
     std_sig  = sig_tr_raw.std() + 1e-8
     mean_coe = coe_tr_raw.mean(axis=0)
     std_coe  = coe_tr_raw.std(axis=0) + 1e-8
 
-    # 3) Normaliza train_norm, val_norm y val_anom
+    # normalizar
     sig_tr = (sig_tr_raw - mean_sig) / std_sig
     coe_tr = (coe_tr_raw - mean_coe) / std_coe
 
     sig_vn = (sig_vn_raw - mean_sig) / std_sig
     coe_vn = (coe_vn_raw - mean_coe) / std_coe
 
-    # Muestrea anomalías para val
+    # muestreae anomalías para val
     idx_a = rng.choice(len(dev_ano_signal_raw), size=vsize, replace=False)
     sig_va_raw = dev_ano_signal_raw[idx_a]
     coe_va_raw = dev_ano_coeffs_raw[idx_a]
@@ -44,7 +44,6 @@ def split_train_val_with_raw_dev(
     sig_va = (sig_va_raw - mean_sig) / std_sig
     coe_va = (coe_va_raw - mean_coe) / std_coe
 
-    # 4) Construye TensorDatasets (permute para Conv1d)
     train_ds = TensorDataset(
         torch.tensor(sig_tr).permute(0,2,1),
         torch.tensor(coe_tr),
