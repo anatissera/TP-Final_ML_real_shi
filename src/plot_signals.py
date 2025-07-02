@@ -15,11 +15,9 @@ COLORS = {
     'anomaly': '#d62728'   # rojo
 }
 
-def subplot_ecg(ecg_data: np.ndarray,
-                labels: Optional[Sequence[int]] = None,
-                num_to_plot: int = 9,
-                lead: int = 0,
-                indices: Optional[Sequence[int]] = None):
+def subplot_ecg(ecg_data: np.ndarray, labels: Optional[Sequence[int]] = None, num_to_plot: int = 9, lead: int = 0, indices: Optional[Sequence[int]] = None):
+    """Muestra subplots de señales ECG."""
+    
     grid_size = int(np.sqrt(num_to_plot))
     assert grid_size**2 == num_to_plot, "num_to_plot debe ser un cuadrado perfecto"
 
@@ -62,17 +60,9 @@ FONT_SIZES = {
     'legend': 13
 }
 
-def plot_ecg_with_fmm(ecg: np.ndarray,
-                      coeffs: np.ndarray,
-                      convert_fn,
-                      num_leads: int,
-                      seq_len: int,
-                      fs: int = 100,
-                      lead: int = 0,
-                      label: str = None):
-    """
-    Dibuja señal ECG cruda y su reconstrucción FMM con estilo mejorado.
-    """
+def plot_ecg_with_fmm(ecg: np.ndarray, coeffs: np.ndarray, convert_fn, num_leads: int, seq_len: int, fs: int = 100, lead: int = 0, label: str = None):
+    """Dibuja señal ECG cruda y su reconstrucción FMM."""
+    
     t = np.arange(seq_len) / fs
 
     # Señal original
@@ -114,13 +104,9 @@ def plot_ecg_with_fmm(ecg: np.ndarray,
     plt.tight_layout()
 
 
-def _generate_wave_segment(wave_dict: Dict[str, np.ndarray],
-                           seq_len: int,
-                           fs: int,
-                           lead: int) -> np.ndarray:
-    """
-    Genera segmento de onda a partir de parámetros en wave_dict.
-    """
+def _generate_wave_segment(wave_dict: Dict[str, np.ndarray], seq_len: int, fs: int, lead: int) -> np.ndarray:
+    """Genera segmento de onda FMM para un lead."""
+    
     A = wave_dict['A'][lead]
     alpha = wave_dict['alpha'][0]
     beta = wave_dict['beta'][lead]

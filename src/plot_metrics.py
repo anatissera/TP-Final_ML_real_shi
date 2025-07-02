@@ -5,7 +5,8 @@ from sklearn.metrics import confusion_matrix, roc_curve, precision_recall_curve,
 
 
 def plot_confusion_matrix(cm: np.ndarray, class_names: list = ["Negativo", "Positivo"], title: str = "Matriz de Confusión", cmap: str = "Blues", figsize: tuple = (6, 6), fontsize: int = 16, numberfmt: str = "d"):
-
+    """Dibuja matriz de confusión con anotaciones."""
+    
     fig, ax = plt.subplots(figsize=figsize)
     im = ax.imshow(cm, interpolation='nearest', aspect='auto', cmap=cmap)
     plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
@@ -34,7 +35,9 @@ def plot_confusion_matrix(cm: np.ndarray, class_names: list = ["Negativo", "Posi
     plt.show()
     
     
-def plot_roc_pr(y_true, y_score, figsize=(6, 4), lw=3, font_size=14, roc_color='teal', pr_color='orchid'):
+def plot_roc_pr(y_true: np.ndarray, y_score: np.ndarray, figsize: tuple[float, float] = (6, 4), lw: float = 3, font_size: int = 14, roc_color: str = 'teal', pr_color: str = 'orchid') -> None:
+    """Dibuja matriz de confusión con anotaciones."""
+    
     # ROC
     fpr, tpr, _ = roc_curve(y_true, y_score)
     auc = roc_auc_score(y_true, y_score)
@@ -66,7 +69,9 @@ def plot_roc_pr(y_true, y_score, figsize=(6, 4), lw=3, font_size=14, roc_color='
     plt.show()
     
     
-def plot_training_losses(train_recon_losses, train_kl_losses, train_total_losses, figsize=(6, 4), lw=2.5, font_size=14, recon_color='salmon', kl_color='seagreen', total_color='cornflowerblue'):
+def plot_training_losses(train_recon_losses: list[float], train_kl_losses: list[float], train_total_losses: list[float], figsize: tuple[float, float] = (6, 4), lw: float = 2.5, font_size: int = 14, recon_color: str = 'salmon', kl_color: str = 'seagreen', total_color: str = 'cornflowerblue') -> None:
+    """Muestra pérdidas Recon, KL y Total por época."""
+    
     epochs = range(1, len(train_recon_losses) + 1)
 
     plt.figure(figsize=figsize)

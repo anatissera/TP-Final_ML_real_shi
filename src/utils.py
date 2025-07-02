@@ -4,6 +4,8 @@ from IPython.display import Markdown, display
 
 
 def find_data_subfolder(subfolder_name, start_path='.'):
+    """Busca subfolder dentro de carpeta data desde start_path."""
+    
     current_path = os.path.abspath(start_path)
     while True:
         candidate = os.path.join(current_path, 'data', subfolder_name)
@@ -16,6 +18,8 @@ def find_data_subfolder(subfolder_name, start_path='.'):
     return None
 
 def display_metrics_as_md(metrics: dict, title: str = "Final Metrics on Unseen Test Set"):
+    """Muestra métricas como Markdown."""
+    
     md = f"<h2 style='margin-bottom:0.3em'>{title}</h2>\n"
     for name, value in metrics.items():
         pretty = name.replace('_', ' ').title()

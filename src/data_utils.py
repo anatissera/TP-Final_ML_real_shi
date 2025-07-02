@@ -9,6 +9,7 @@ DEFAULT_WAVES = ["P", "Q", "R", "S", "T"]
 
 def get_fmm_num_parameters(n_leads: int, n_waves: int = 5) -> Tuple[int, int]:
     """Devuelve el total de parámetros y el conteo por onda (A, alpha, beta, omega)."""
+    
     per_wave = 2 * n_leads + 2
     total = per_wave * n_waves + n_leads
     return total, per_wave
@@ -23,6 +24,7 @@ offset_map = {
 
 def get_coeff_indexes(coeff: str, wave_idx: int, n_leads: int, n_waves: int = 5) -> Tuple[int, int]:
     """Calcula índices inicio y fin para un coeficiente dado."""
+    
     _, per_wave = get_fmm_num_parameters(n_leads, n_waves)
     if coeff not in offset_map:
         raise ValueError(f"Unknown coeff '{coeff}'")
@@ -35,12 +37,14 @@ def get_coeff_indexes(coeff: str, wave_idx: int, n_leads: int, n_waves: int = 5)
 
 def get_M_indexes(n_leads: int, n_waves: int = 5) -> Tuple[int, int]:
     """Obtiene índices de M al final del array."""
+    
     total, _ = get_fmm_num_parameters(n_leads, n_waves)
     return total - n_leads, total
 
 
 def get_circular_mask(n_leads: int, n_waves: int = 5) -> np.ndarray:
     """Máscara booleana para los índices de alpha y beta."""
+    
     total, _ = get_fmm_num_parameters(n_leads, n_waves)
     mask = np.zeros(total, dtype=bool)
     for i in range(n_waves):
@@ -55,6 +59,7 @@ def get_circular_mask(n_leads: int, n_waves: int = 5) -> np.ndarray:
 def convert_fmm_dict_to_array(fmm: Dict[str, Dict[str, np.ndarray]],
                               waves: List[str] = DEFAULT_WAVES) -> np.ndarray:
     """Convierte dict FMM anidado a un array plano."""
+    
     n_waves = len(waves)
     n_leads = fmm[waves[0]]['A'].shape[0]
     total, _ = get_fmm_num_parameters(n_leads, n_waves)
@@ -72,6 +77,7 @@ def convert_fmm_dict_to_array(fmm: Dict[str, Dict[str, np.ndarray]],
 
 def array_to_fmm_dict(coeffs: np.ndarray, num_leads: int, num_waves: int = 5) -> Dict[str, Dict[str, np.ndarray]]:
     """Convierte un array plano de coeficientes en un dict FMM anidado."""
+    
     total, _ = get_fmm_num_parameters(num_leads, num_waves)
     m_start, m_end = get_M_indexes(num_leads, num_waves)
 
@@ -95,6 +101,7 @@ def array_to_fmm_dict(coeffs: np.ndarray, num_leads: int, num_waves: int = 5) ->
 
 def extract_lead_coeffs(arr: np.ndarray, lead: int, n_leads: int, n_waves: int = 5) -> np.ndarray:
     """Extrae parámetros FMM de un solo electrodo."""
+    
     single_total, _ = get_fmm_num_parameters(1, n_waves)
     out = np.zeros(single_total)
     for idx, coeff in enumerate(('A', 'alpha', 'beta', 'omega')):
@@ -110,6 +117,7 @@ def extract_lead_coeffs(arr: np.ndarray, lead: int, n_leads: int, n_waves: int =
 
 def angle_to_cos_sin(X: np.ndarray, ang_mask: np.ndarray, zero_one: bool = False) -> np.ndarray:
     """Agrega coseno y seno de ángulos al array de coeficientes."""
+    
     vals = X[:, ang_mask]
     cos = np.cos(vals)
     sin = np.sin(vals)
@@ -124,6 +132,7 @@ def angle_to_cos_sin(X: np.ndarray, ang_mask: np.ndarray, zero_one: bool = False
 
 def sort_fmm_coeffs_array(fmm_array: np.ndarray, n_leads: int, n_waves: int = 5) -> np.ndarray:
     """Ordena coeficientes FMM por ángulo alpha creciente."""
+    
     # lineariza ángulos alpha
     alpha_idxs = [get_coeff_indexes('alpha', i, n_leads, n_waves)[0]
                   for i in range(n_waves)]
